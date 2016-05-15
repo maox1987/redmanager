@@ -5,3 +5,4 @@ tmp
 /public/bower_components/
 log/
 /*.log
+bower_components/
