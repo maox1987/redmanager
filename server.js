@@ -57,6 +57,7 @@ if (app.get('env') === 'development') {
         console.log(err);
         res.status(err.status || 500);
         res.render('error', {
+            title:'出错了',
             message: err.message,
             error: err
         });
@@ -68,6 +69,7 @@ if (app.get('env') === 'development') {
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
+        title:'出错了',
         message: err.message,
         error: {}
     });

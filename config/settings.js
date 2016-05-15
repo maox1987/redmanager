@@ -11,6 +11,17 @@ module.exports = {
         cookie:{
             maxAge:10*60*1000
         }
+    },
+    mssql:{
+        user:'nodejs',
+        password:'abc@163!',
+        server:'192.168.19.222',
+        database:'brnmall',
+        pool:{
+            max:5,
+            min:0,
+            idleTimeoutMillis:30000
+        }
     }
 };
 

@@ -19,7 +19,32 @@
       <span class="panel-title"><%=title%></span>
     </div>
     <div class="panel-body">
-      <button class="btn">导出</button>
+      <div id="btn">
+        <button id="btn_create" class="btn btn-primary">重新生成</button>
+        <a id="btn_download" href="/tmp/items/产品.xlsx" class="btn btn-info">下载</a>
+      </div>
+    </div>
+    <div id="wait" hidden="true">
+      <h2>数据生成中，请耐心等待</h2>
     </div>  
   </div> 
 </div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#btn_create").on("click",function(e){
+      $("#btn").hide();
+      $("#wait").show();
+      $.ajax({
+        url:"file",
+        type:"POST",
+        data:{},
+        dataType: 'JSON',
+        success:function(data){
+          $("#btn").show();
+          $("#wait").hide();
+        }
+      });
+    });
+    
+  });
+</script>
