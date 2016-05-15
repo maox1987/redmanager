@@ -1,0 +1,27 @@
+<div class="col-sm-2">
+  <%- include('_menu') -%>         
+            
+</div>
+
+<div class="col-md-10">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="panel-title"><%=title%></span>
+    </div>
+    <div class="panel-body">
+      <a class="btn btn-info" href="/doc/商品导入模板.xlsx">导入模板下载</a>
+        <br><br>
+      <form method="POST" action="/items/import/file" enctype="multipart/form-data">
+        <span>选择字段：</span>
+        <% for(var key in inputs) {%>
+          <%=key%>:<input type="checkbox" name="input" value="<%=key%>" <%=inputs[key].isUpdate?'checked':''%> >&nbsp;&nbsp;
+        <%}%>
+        <br><br>
+        
+        <input type="file" name="excel"><br>
+        <input class="btn btn-primary" type="submit" value="提交">
+      </form>
+    </div>
+    
+  </div> 
+</div>

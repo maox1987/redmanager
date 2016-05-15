@@ -19,6 +19,7 @@
     "express-session": "^1.13.0",
     "morgan": "^1.7.0",
     "mssql": "^3.3.0",
+    "multer": "^1.1.0",
     "node-xlsx": "^0.7.1",
     "promise": "^7.1.1",
     "serve-favicon": "^2.3.0"

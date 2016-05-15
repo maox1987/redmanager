@@ -1,0 +1,40 @@
+<div class="col-sm-2">
+  <%- include('_menu') -%>         
+            
+</div>
+
+<div class="col-md-10">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <span class="panel-title"><%=title%></span>
+    </div>
+    <div class="panel-body">
+      <div>
+        <div>总计：<%=results.length%></div>
+        <div>成功：<%=successes.length%></div>
+        <div>错误：<%=errs.length%></div>
+        <div>未匹配：<%=empties.length%></div>
+      </div>
+      <hr>
+      <div>
+        错误记录：
+        <ul>
+         <% errs.forEach(function(item) {%>
+          <li><%=item.row+':'+item.content%></li>
+         <%})%> 
+        </ul>
+        
+      </div>
+      <hr>
+      <div>
+        未匹配记录：
+        <ul>
+         <% empties.forEach(function(item) {%>
+          <li><%=item.row+':'+item.content%></li>
+         <%})%> 
+        </ul>
+      </div>
+    </div>
+    
+  </div> 
+</div>

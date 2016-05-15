@@ -3,7 +3,9 @@ var mssql = require('mssql');
 var config =settings.mssql;
 
 var connection = new mssql.Connection(config);
-connection.connect();
+//connection.connect();
+
+exports.mssql = mssql;
 
 exports.sql = function(SQL,cb){
     if(connection.connected){
@@ -36,4 +38,15 @@ exports.query = function(sql){
        
     }
 };
+
+exports.request = function(cb){
+    if(connection.connected){
+        return cb(null,new mssql.Request(connection));
+    }else{
+       return connection.connect().then(function(){
+            return cb(null,new mssql.Request(connection));
+       }).catch(cb);
+       
+    }
+}
 
