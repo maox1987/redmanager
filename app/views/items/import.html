@@ -14,7 +14,7 @@
       <form method="POST" action="/items/import/file" enctype="multipart/form-data">
         <span>选择字段：</span>
         <% for(var key in inputs) {%>
-          <%=key%>:<input type="checkbox" name="input" value="<%=key%>" <%=inputs[key].isUpdate?'checked':''%> >&nbsp;&nbsp;
+          <%=key%>:<input id="<%=key%>" type="checkbox" name="input" value="<%=key%>" <%=inputs[key].isUpdate?'checked':''%> >&nbsp;&nbsp;
         <%}%>
         <br><br>
         
@@ -25,3 +25,22 @@
     
   </div> 
 </div>
+<script type="text/javascript">
+  $(document).ready(function(){
+    
+    $("#storeid").click(changeHandler);
+    $("#storecid").click(changeHandler);
+    $("#storestid").click(changeHandler);
+    function changeHandler(e){
+      if (e.target.checked){
+        $("#storeid")[0].checked = true;
+        $("#storecid")[0].checked =true;
+        $("#storestid")[0].checked =true;
+      } else {
+        $("#storeid")[0].checked = false;
+        $("#storecid")[0].checked =false;
+        $("#storestid")[0].checked =false;
+      }    
+    }
+  });
+</script>

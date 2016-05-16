@@ -1,39 +1,11 @@
 "use strict"
 
 var sqlHelper = require('../utils/sqlHelper');
-var xlsx = require('node-xlsx');
-var fs = require('fs');
 
-module.exports ={
-  GetFromDatabase:function(){
-    var queryStr = "Select  a.*,b.number,b.limit From dbo.bma_products a Left JOIN dbo.bma_productstocks b On a.pid=b.pid";
-    return sqlHelper.query(queryStr);
-  },
-  RowsToXlsx:rowsToExcel,
+module.exports = {
   UpdateToSql:updateToSql
 }
 
-function rowsToExcel(rows){
-  var data =[];
-  if(rows.length){
-    var keys=[];
-    for(let key in rows[0]){
-      keys.push(key);
-    }
-    data.push(keys);
-  }else{
-    return ;
-  }
-  rows.forEach(function(row){
-    var values=[];
-    for(let i=0;i<data[0].length;i++){
-      values.push(row[data[0][i]]);
-    }
-    data.push(values);
-  });
-  var buffer = xlsx.build([{name: "mySheetName", data: data}]);
-  return buffer;
-}
 
 function updateToSql(rows,inputConfig,cb){
     var results=[];
@@ -75,22 +47,17 @@ function updateToSql(rows,inputConfig,cb){
 
 
 function findOne(id,cb){
-    var sqlQuery = "Select pid From dbo.bma_products Where pid ="+id;
+    var sqlQuery = "Select pid From dbo.bma_productstocks Where pid ="+id;
     sqlHelper.sql(sqlQuery,cb);
 }
 
 
 
 function updateOne(row,inputConfig,cb){
-    /*var sqlQuery = "Update dbo.bma_products \
-                    Set name='"+row[1]+"',\
-                    shopprice='"+row[2]+"',\
-                    marketprice='"+row[3]+"',\
-                    showimg='"+row[4]+"' \
-                    Where pid="+row[0];*/
+    
     sqlHelper.request(function(err,request){
         if(err) return cb(err);
-        var queryStr = "Update dbo.bma_products Set ";
+        var queryStr = "Update dbo.bma_productstocks Set ";
         var inputStr =[];
         for(let key in inputConfig.selected){
             let input = inputConfig.selected[key];
@@ -107,4 +74,3 @@ function updateOne(row,inputConfig,cb){
     
     
 }
-

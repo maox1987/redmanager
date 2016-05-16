@@ -3,6 +3,7 @@
 var express =require('express');
 var router = express.Router();
 var ItemsModels = require('../models/items');
+var StockModels = require('../models/items_stock');
 var fs = require('fs');
 var multer = require('multer');
 var xlsx = require('node-xlsx');
@@ -72,7 +73,7 @@ router.get('/import',function(req,res,next){
                 isUpdate:false,
                 type:sqlHelper.mssql.Char, 
                 rowNum:1
-            },
+            },         
             'name':{
                 isUpdate:false,
                 type:sqlHelper.mssql.NVarChar, 
@@ -107,7 +108,27 @@ router.get('/import',function(req,res,next){
                 isUpdate:false,
                 type:sqlHelper.mssql.NText,
                 rowNum:8
-            }
+            },
+            'CountryId':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int,
+                rowNum:9
+            },
+            'storeid':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int,
+                rowNum:10
+            },
+            'storecid':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int,
+                rowNum:11
+            },
+            'storestid':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int,
+                rowNum:12
+            },
         }
     };
     res.render('items/import',{
@@ -127,7 +148,7 @@ router.post('/import/file',upload.single('excel'),function(req,res,next){
                 isUpdate:false,
                 type:sqlHelper.mssql.Char, 
                 rowNum:1
-            },
+            },         
             'name':{
                 isUpdate:false,
                 type:sqlHelper.mssql.NVarChar, 
@@ -162,7 +183,27 @@ router.post('/import/file',upload.single('excel'),function(req,res,next){
                 isUpdate:false,
                 type:sqlHelper.mssql.NText,
                 rowNum:8
-            }
+            },
+            'CountryId':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int,
+                rowNum:9
+            },
+            'storeid':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int,
+                rowNum:10
+            },
+            'storecid':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int,
+                rowNum:11
+            },
+            'storestid':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int,
+                rowNum:12
+            },
         }
     };
     for(let key in inputConfig.selected){
@@ -173,6 +214,104 @@ router.post('/import/file',upload.single('excel'),function(req,res,next){
         }
     }
     ItemsModels.UpdateToSql(obj[0].data,inputConfig,function(results){
+        
+        var errs=[];
+        var successes=[];
+        var empties=[];
+        results.forEach(function(item){
+            switch(item.status){
+                case 2:
+                empties.push(item);
+                break;
+                case 1:
+                errs.push(item);
+                break;
+                case 0:
+                successes.push(item);
+                break;
+            }
+        });
+        
+        successes.forEach(function(item){
+            console.log(item.row+':'+item.content);
+        });
+        errs.forEach(function(item){
+            console.log(item.row+':'+item.content);
+        });
+        
+        empties.forEach(function(item){
+            console.log(item.row+':'+item.content);
+        });
+        
+        console.log('total: '+results.length);
+        console.log('success:'+successes.length);
+        console.log('err:',+errs.length);
+        console.log('empty:'+empties.length);
+        console.log('end...');
+        //console.log(results);
+        res.render('items/import_result',{
+            title:'导入结果',
+            results:results,
+            successes:successes,
+            errs:errs,
+            empties:empties
+            
+        });
+    });
+});
+
+
+router.get('/stock/import',function(req,res,next){
+    var inputConfig = {
+        selected:{
+            'number':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int, 
+                rowNum:1
+            },         
+            'limit':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int, 
+                rowNum:2
+            },
+        }
+    };
+    res.render('items/stock_import',{
+        title:'库存导入',
+        inputs:inputConfig.selected
+    });
+});
+
+
+router.post('/stock/import/file',upload.single('excel'),function(req,res,next){
+    //console.log(req.file);
+    var obj = xlsx.parse(req.file.buffer);
+    console.log(req.body);
+    
+    var inputConfig = {
+        selected:{
+            'number':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int, 
+                rowNum:1
+            },         
+            'limit':{
+                isUpdate:false,
+                type:sqlHelper.mssql.Int, 
+                rowNum:2
+            },
+        }
+    };
+    
+    for(let key in inputConfig.selected){
+        if(req.body.input.indexOf(key)!=-1){
+            inputConfig.selected[key].isUpdate=true;
+        }else{
+            inputConfig.selected[key].isUpdate=false;
+        }
+    }
+    
+    StockModels.UpdateToSql(obj[0].data,inputConfig,function(results){
         
         var errs=[];
         var successes=[];
