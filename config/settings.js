@@ -1,7 +1,7 @@
 
 
 module.exports = {
-    port:normalizePort(process.env.PORT || '8080'),
+    port:normalizePort(process.env.PORT || '3000'),
     mongodb:{
         connectStr:'mongodb://192.168.19.34/redbag' //测试服务器
     },
